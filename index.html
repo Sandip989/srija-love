@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Only For You ❤️</title>
+
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        font-family: "Segoe UI", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        overflow: hidden;
+      }
+
+      /* ===== DEFAULT BACKGROUND ===== */
+      .bg-default,
+      .bg-love,
+      .bg-other {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        z-index: 0;
+      }
+
+      .bg-default img,
+      .bg-other img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(45%);
+      }
+
+      /* ===== 4 PHOTO GRID ===== */
+      .bg-love {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+
+      .bg-love img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(55%);
+      }
+
+      /* ===== CARD ===== */
+      .card {
+        background: rgba(0, 0, 0, 0.55);
+        padding: 30px;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        z-index: 2;
+      }
+
+      input {
+        width: 90%;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      button {
+        margin-top: 15px;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        background: #ff3366;
+        color: white;
+      }
+
+      .result {
+        margin-top: 25px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .heart {
+        font-size: 60px;
+        animation: pulse 1s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .typing {
+        margin-top: 10px;
+        min-height: 50px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- DEFAULT -->
+    <div class="bg-default" id="defaultBg" style="display: block">
+      <img src="photos/default.jpg" />
+    </div>
+
+    <!-- LOVE -->
+    <div class="bg-love" id="loveBg">
+      <img src="photos/srija.jpg" />
+      <img src="photos/fanush.jpg" />
+      <img src="photos/us.jpg" />
+      <img src="photos/d.jpg" />
+    </div>
+
+    <!-- OTHER -->
+    <div class="bg-other" id="otherBg">
+      <img src="photos/me angry.jpg" />
+    </div>
+
+    <!-- AUDIO -->
+    <audio id="song1" src="audios/2.mp3"></audio>
+    <audio id="song2" src="audios/3.mp3"></audio>
+    <audio id="angryAudio" src="audios/4.mp3"></audio>
+
+    <!-- CARD -->
+    <div class="card">
+      <h2>Enter Your Name 💌</h2>
+      <input type="text" id="nameInput" placeholder="Type your name" />
+      <br />
+      <button onclick="checkName()">Submit</button>
+      <div class="result" id="result"></div>
+    </div>
+
+    <script>
+      const song1 = document.getElementById("song1");
+      const song2 = document.getElementById("song2");
+      const angryAudio = document.getElementById("angryAudio");
+
+      const loveBg = document.getElementById("loveBg");
+      const otherBg = document.getElementById("otherBg");
+      const defaultBg = document.getElementById("defaultBg");
+      const result = document.getElementById("result");
+
+      song1.onended = () => song2.play();
+      song2.onended = () => song1.play();
+
+      function stopAllAudio() {
+        [song1, song2, angryAudio].forEach((a) => {
+          a.pause();
+          a.currentTime = 0;
+        });
+      }
+
+      function checkName() {
+        const name = document
+          .getElementById("nameInput")
+          .value.trim()
+          .toLowerCase();
+
+        stopAllAudio();
+        defaultBg.style.display = "none";
+        loveBg.style.display = "none";
+        otherBg.style.display = "none";
+
+        if (name === "srija") {
+          loveBg.style.display = "grid";
+          result.innerHTML = `
+      <div class="heart">❤️</div>
+      <div class="typing" id="typing"></div>
+    `;
+          song1.play();
+          typeText(
+            "Srija, I love you forever ❤️ Do you know that if I ever dedicate a song to you… wait for it, wait for it… yeah, this is the one 🎶❤️"
+          );
+        } else {
+          otherBg.style.display = "block";
+          result.innerHTML = "<h2>Fuck Off!!!!</h2>";
+          angryAudio.play();
+        }
+      }
+
+      function typeText(text) {
+        let i = 0;
+        const typing = document.getElementById("typing");
+        typing.innerHTML = "";
+        const interval = setInterval(() => {
+          typing.innerHTML += text.charAt(i);
+          i++;
+          if (i >= text.length) clearInterval(interval);
+        }, 80);
+      }
+    </script>
+  </body>
+</html>
